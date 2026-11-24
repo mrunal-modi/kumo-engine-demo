@@ -21,29 +21,28 @@ That version is a wheel built from NVIDIA/kumo-engine `main` at commit `5d17fb3`
 | `output/call_list.csv` | Output of `3_inference.ipynb`: all 500 customers ranked by their chance of ordering | yes |
 | `shop_demo.py` | Shared setup for the notebooks: the table and link definitions, and readable summaries | yes |
 | `kumo_bundle.py` | Saves a trained model, checks new data against it and reloads it | yes |
+| `Makefile` | `make install` and the clean-up commands; `make` lists them | yes |
+| `scripts/build_kumo_wheel.sh` | Builds the macOS kumo-engine wheel; `make install` runs it | yes |
 | `models/` | The model saved by `2_training.ipynb`; rebuilt on every run and derived from the data | no |
-| `scratch/` | Kumo's working files (`kumo_work/`), the built wheel (`wheels/`) and `build.log` | no |
+| `scratch/` | Kumo's working files (`kumo_work/`), plus the kumo-engine source, its build and the built wheel (`kumo-src/`, `build-venv/`, `wheels/`, `build.log`) | no |
 | `.claude/skills/kumo-save-load-model/` | A Claude Code skill for saving and reloading Kumo models | yes |
 
 ## Set up
 
-PyPI's kumo-engine 1.0.1 has only a Linux x86_64 wheel, so build the macOS wheel from `main` first.
-The build needs Rust; it uses toolchain 1.99.1, pinned in `packages/diskgraph/rust-toolchain.toml`.
-
 ```bash
-brew install rustup && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-git clone https://github.com/NVIDIA/kumo-engine.git /tmp/kumo-src && git -C /tmp/kumo-src checkout 5d17fb3
-(cd /tmp/kumo-src/packages/diskgraph && rustup toolchain install --profile minimal)
-python3 -m venv /tmp/kumo-build && /tmp/kumo-build/bin/pip install wheel
-(cd /tmp/kumo-src && PYTHON=/tmp/kumo-build/bin/python OUTPUT_DIR="$OLDPWD/scratch/wheels" \
-  ./packages/kumo-engine/scripts/build_wheel.sh)    # run from this folder; writes scratch/wheels/*.whl
+make install
 ```
 
-Then create the notebooks' environment from this folder:
+PyPI's kumo-engine 1.0.1 has only a Linux x86_64 wheel, so `make install` first builds the macOS wheel from NVIDIA/kumo-engine at the commit `requirements.txt` pins, then creates the notebooks' environment.
+The first run takes several minutes, mostly compiling Kumo's Rust index (DiskGraph) and downloading torch. After that it does nothing until `requirements.txt` changes.
+In order, it:
 
-```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-```
+1. installs rustup with Homebrew if there's no Rust, then the toolchain kumo-engine pins (1.99.1, in `packages/diskgraph/rust-toolchain.toml`);
+2. clones kumo-engine into `scratch/kumo-src/` and builds the wheel into `scratch/wheels/`, logging to `scratch/build.log`;
+3. creates `.venv/` and installs `requirements.txt` into it.
+
+It uses `python3`. For another interpreter (3.11 or newer), run `make install PYTHON=python3.14`.
+The build steps are in `scripts/build_kumo_wheel.sh`.
 
 ## Run
 
@@ -51,9 +50,9 @@ Open each notebook in VS Code, select the `.venv` kernel and choose **Run All**,
 
 - `2_training.ipynb` retrains and replaces the saved model. It sets a training seed, but separate runs still differ: a customer's score can move by several points.
 - `3_inference.ipynb` scores from the saved model, so it gives the same call list every time until notebook 2 runs again.
-- `scratch/kumo_work/` grows a little with each training run. Delete it whenever you like; the notebooks rebuild the index in a second or two. Keep `scratch/wheels/`, which `requirements.txt` installs from.
+- `scratch/kumo_work/` grows a little with each training run. Delete it whenever you like (`make clean` also deletes the saved model); the notebooks rebuild the index in a second or two. Keep `scratch/wheels/`, which `requirements.txt` installs from.
 
-When PyPI publishes a macOS wheel (the `main` README describes 1.1.0), pin that version in `requirements.txt` and drop the `--find-links` line.
+When PyPI publishes a macOS wheel (the `main` README describes 1.1.0), pin that version in `requirements.txt` and drop the `--find-links` line; `make install` then skips the build.
 
 ## License
 
