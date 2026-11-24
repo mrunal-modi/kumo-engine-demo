@@ -1,0 +1,11 @@
+product_id,name,category,price
+P1,FlashArray//X,Hardware,1200
+P2,Support renewal,Services,300
+P3,FlashArray//C,Hardware,800
+P4,Evergreen//One,Subscription,500
+P5,Portworx,Software,250
+P6,Pure1,Software,100
+P7,Cloud Block Store,Software,400
+P8,Professional services,Services,600
+P9,FlashBlade//S,Hardware,900
+P10,FlashBlade//E,Hardware,700

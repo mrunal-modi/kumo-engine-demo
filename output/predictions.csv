@@ -1,0 +1,11 @@
+ENTITY,name,orders so far,True_PROB,TARGET_PRED
+C001,Acme,3,0.24400333,False
+C002,Globex,25,0.5106288,True
+C003,Initech,0,0.013355606,False
+C388,Atlas Retail,0,0.0100496365,False
+C447,Granite Capital,0,0.06685899,False
+C341,Falcon Networks,0,0.018772094,False
+C290,Orchid Robotics,0,0.009181241,False
+C418,Maple Freight,1,0.04915981,False
+C467,Silver Pharma,0,0.008911889,False
+C311,Evergreen Foods,0,0.06400367,False
