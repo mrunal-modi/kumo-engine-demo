@@ -1,3 +1,5 @@
 .venv/
 scratch/
 .ipynb_checkpoints/
+models/
+__pycache__/
