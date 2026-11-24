@@ -54,3 +54,8 @@ Open each notebook in VS Code, select the `.venv` kernel and choose **Run All**,
 - `scratch/kumo_work/` grows a little with each training run. Delete it whenever you like; the notebooks rebuild the index in a second or two. Keep `scratch/wheels/`, which `requirements.txt` installs from.
 
 When PyPI publishes a macOS wheel (the `main` README describes 1.1.0), pin that version in `requirements.txt` and drop the `--find-links` line.
+
+## License
+
+MIT; see `LICENSE`.
+Kumo Engine itself is licensed separately under Apache-2.0 and isn't included in this repo: you install it as described in Set up.
