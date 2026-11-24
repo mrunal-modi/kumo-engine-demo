@@ -1,0 +1,5 @@
+# PyPI's kumo-engine (1.0.1) has only a Linux x86_64 wheel, so this pins the macOS wheel
+# built from NVIDIA/kumo-engine main at 5d17fb3. README.md shows how to rebuild it.
+--find-links ./scratch/wheels
+kumo-engine==1.0.0.dev0+5d17fb3
+ipykernel
